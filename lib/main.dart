@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 void main() => runApp(new MyApp());
 
@@ -26,25 +25,68 @@ class BudgetItem extends StatelessWidget {
     final String itemDueDay;
     
     @override
-      Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
         // TODO: implement build
         return new Card(
             child : new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget> [
-                    new Text(itemName),
-                    new Text(itemAmount),
-                    new Text(itemDueDay)
+                    new Text(
+                        itemName,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold, 
+                            fontSize: 25.1
+                        ),
+                    ),
+                    new Row(
+                        children: <Widget> [
+                            new Expanded(
+                                child: new Text(
+                                    itemAmount,
+                                    textAlign: TextAlign.center,
+                                    style: new TextStyle(
+                                        // fontWeight: FontWeight.bold, 
+                                        fontSize: 25.1
+                                    ),
+                                ),
+                            ),
+                            new Expanded(
+                                child: new Text(
+                                    itemDueDay,
+                                    textAlign: TextAlign.center,
+                                    style: new TextStyle(
+                                        // fontWeight: FontWeight.bold, 
+                                        fontSize: 25.1
+                                    ),
+                                ),
+                            ),
+                        ]
+                    )
                 ]
             )
         );
-      }
+    }
 }
 
 class BudgetScreenState extends State<BudgetScreen> {
     final List<BudgetItem> _budgetItems = <BudgetItem>[];
 
-    void _newBudgetItem() async {
+    void _newBudgetItem() {
+        BudgetItem budgetItem = new BudgetItem(
+            itemName: "Car Bill",
+            itemAmount: "\$123",
+            itemDueDay: "12",
+        );
+
+        setState(() {
+            _budgetItems.insert(0, budgetItem);
+        });
+
+        return;
+    
         final TextEditingController _nameTextController = new TextEditingController();
         final TextEditingController _amountTextController = new TextEditingController();
         final TextEditingController _dayTextController = new TextEditingController();
@@ -119,11 +161,6 @@ class BudgetScreenState extends State<BudgetScreen> {
     
     @override
     Widget build(BuildContext context) {
-        // _budgetItems.insert(0, new BudgetItem(
-        //     itemName: "_itemName",
-        //     itemAmount: "_itemAmount",
-        //     itemDueDay: "_itemDay",
-        // ));
         // TODO: implement build
         return new Scaffold(
             appBar: new AppBar(
@@ -132,9 +169,11 @@ class BudgetScreenState extends State<BudgetScreen> {
             body: new Column(
                 children: <Widget>[
                     new Flexible(
-                        child: new ListView.builder(
+                        child: new GridView.builder(
+                            gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 250.0
+                            ),
                             padding: new EdgeInsets.all(8.0),
-                            reverse: true,
                             itemBuilder: (_, int index) => _budgetItems[index],
                             itemCount: _budgetItems.length,
                         )
@@ -147,5 +186,5 @@ class BudgetScreenState extends State<BudgetScreen> {
                 child: new Icon(Icons.add),
             ),
         );
-      }
+    }
 }

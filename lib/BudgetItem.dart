@@ -12,7 +12,7 @@ class BudgetItem extends StatelessWidget {
         // TODO: implement build
         return new Card(
             child : new Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget> [
                     new Text(
@@ -25,6 +25,8 @@ class BudgetItem extends StatelessWidget {
                         ),
                     ),
                     new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget> [
                             new Expanded(
                                 child: new Text(
@@ -46,6 +48,18 @@ class BudgetItem extends StatelessWidget {
                                     ),
                                 ),
                             ),
+                        ]
+                    ),
+                    new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget> [
+                            new RaisedButton(
+                                child: new Text("Paid"),
+                                onPressed:  () {
+                                    Scaffold.of(context).showSnackBar(new SnackBar(content: Text("Congrats")));
+                                },
+                            )
                         ]
                     )
                 ]

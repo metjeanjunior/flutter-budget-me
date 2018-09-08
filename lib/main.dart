@@ -80,7 +80,7 @@ class BudgetScreenState extends State<BudgetScreen> {
                                 else {
                                     BudgetItem budgetItem = new BudgetItem(
                                         itemName: _nameTextController.text,
-                                        itemAmount: _amountTextController.text,
+                                        itemAmount: '\$' + _amountTextController.text,
                                         itemDueDay: _dayTextController.text,
                                     );
 

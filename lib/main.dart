@@ -25,17 +25,17 @@ class BudgetScreenState extends State<BudgetScreen> {
     final List<BudgetItem> _budgetItems = <BudgetItem>[];
 
     void _newBudgetItem() {
-        // BudgetItem budgetItem = new BudgetItem(
-        //     itemName: "Car Bill",
-        //     itemAmount: "\$123",
-        //     itemDueDay: "12",
-        // );
+        BudgetItem budgetItem = new BudgetItem(
+            itemName: "Car Bill",
+            itemAmount: "\$123",
+            itemDueDay: "12",
+        );
 
-        // setState(() {
-        //     _budgetItems.insert(0, budgetItem);
-        // });
+        setState(() {
+            _budgetItems.insert(0, budgetItem);
+        });
 
-        // return;
+        return;
     
         final TextEditingController _nameTextController = TextEditingController();
         final TextEditingController _amountTextController = TextEditingController();

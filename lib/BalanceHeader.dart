@@ -8,7 +8,7 @@ class BalanceHeader extends StatefulWidget {
 class BalanceHeaderState extends State<BalanceHeader> {
     double _bodyHeight = 0.0;
 
-    int _incomeAmnt = 150;
+    int _incomeAmnt = 0;
     int _expAmnt = 150;
     int _numChecks = 4;
 
@@ -18,6 +18,94 @@ class BalanceHeaderState extends State<BalanceHeader> {
 
     _getBalanceAmnt() {
         return this._incomeAmnt - this._expAmnt;
+    }
+
+    void customShowSnackBar(String text) =>  Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+
+    _updateIncome() {
+        TextEditingController _incomeAmntCtr = TextEditingController();
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+                return AlertDialog(
+                    title: Text('Budget Item Info'),
+                    content: SingleChildScrollView(
+                        child: TextField(
+                            autofocus: true,
+                            maxLength: 10,
+                            keyboardType: TextInputType.number,
+                            controller: _incomeAmntCtr,
+                            decoration: InputDecoration.collapsed(hintText: "Paycheck Amount"),
+                        ),
+                    ),
+                    actions: <Widget>[
+                        FlatButton(
+                            child: Text("Update"),
+                            onPressed: () { 
+                                if (_incomeAmntCtr.text == "")
+                                        customShowSnackBar("Please fill in all fields");
+                                else {
+                                    setState(() {
+                                        _incomeAmnt = int.parse(_incomeAmntCtr.text);
+                                    });
+
+                                    Navigator.of(context).pop();
+                                }
+                            },
+                        ),
+                        FlatButton(
+                            child: Text("cancel"),
+                            onPressed: () { 
+                                Navigator.of(context).pop();
+                            },
+                        )
+                    ],
+                );
+            }
+        );
+    }
+
+    _updateNumChecks() {
+        final TextEditingController _numChecksCtr = TextEditingController();
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+                return AlertDialog(
+                    title: Text('Budget Item Info'),
+                    content: SingleChildScrollView(
+                        child: TextField(
+                            autofocus: true,
+                            maxLength: 2,
+                            keyboardType: TextInputType.number,
+                            controller: _numChecksCtr,
+                            decoration: InputDecoration.collapsed(hintText: "# of Paychecks"),
+                        ),
+                    ),
+                    actions: <Widget>[
+                        FlatButton(
+                            child: Text("Update"),
+                            onPressed: () { 
+                                if (_numChecksCtr.text == "")
+                                        customShowSnackBar("Please fill in all fields");
+                                else {
+                                    setState(() {
+                                        _numChecks = int.parse(_numChecksCtr.text);
+                                    });
+
+                                    Navigator.of(context).pop();
+                                }
+                            },
+                        ),
+                        FlatButton(
+                            child: Text("cancel"),
+                            onPressed: () { 
+                                Navigator.of(context).pop();
+                            },
+                        )
+                    ],
+                );
+            }
+        );
     }
 
     @override
@@ -49,7 +137,7 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                 )
                             ),
                             IconButton(
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: Icon(Icons.settings),
                                 onPressed: () => setState(() => this._bodyHeight = _getNewHeight() ),
                             )
                         ]
@@ -58,7 +146,7 @@ class BalanceHeaderState extends State<BalanceHeader> {
                         // height: this._bodyHeight,
                         child: AnimatedContainer(
                             height: this._bodyHeight,
-                            curve: Curves.bounceInOut,
+                            curve: Curves.easeInOut,
                             duration: const Duration(milliseconds: 500),
                             child: Column(
                                 children: <Widget>[
@@ -87,7 +175,7 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                             ),
                                             IconButton(
                                                 icon: Icon(Icons.edit),
-                                                onPressed: null,
+                                                onPressed: _updateIncome
                                             )
                                         ]
                                     ),
@@ -114,10 +202,6 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                                     ),
                                                 )
                                             ),
-                                            IconButton(
-                                                icon: Icon(Icons.edit),
-                                                onPressed: null,
-                                            )
                                         ]
                                     ),
                                     Row(
@@ -144,7 +228,7 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                             ),
                                             IconButton(
                                                 icon: Icon(Icons.edit),
-                                                onPressed: null,
+                                                onPressed: _updateNumChecks,
                                             )
                                         ]
                                     ),

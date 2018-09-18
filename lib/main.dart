@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'BudgetItem.dart';
+import 'BalanceHeader.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
-        return new MaterialApp(
+        return MaterialApp(
             title: 'Budget Me',
-            home: new BudgetScreen(),
+            home: BudgetScreen(),
         );
     }
 }
 
 class BudgetScreen extends StatefulWidget {
     @override
-    BudgetScreenState createState() => new BudgetScreenState();
+    BudgetScreenState createState() => BudgetScreenState();
 }
 
 
@@ -36,43 +37,43 @@ class BudgetScreenState extends State<BudgetScreen> {
 
         // return;
     
-        final TextEditingController _nameTextController = new TextEditingController();
-        final TextEditingController _amountTextController = new TextEditingController();
-        final TextEditingController _dayTextController = new TextEditingController();
+        final TextEditingController _nameTextController = TextEditingController();
+        final TextEditingController _amountTextController = TextEditingController();
+        final TextEditingController _dayTextController = TextEditingController();
 
         showDialog(
             context: context,
             // barrierDismissible: false,
             builder: (BuildContext context) {
-                return new AlertDialog(
-                    title: new Text('Budget Item Info'),
-                    content: new SingleChildScrollView(
-                        child: new ListBody(
+                return AlertDialog(
+                    title: Text('Budget Item Info'),
+                    content: SingleChildScrollView(
+                        child: ListBody(
                             children: <Widget>[
-                                new TextField(
+                                TextField(
                                     autofocus: true,
                                     controller: _nameTextController,
                                     maxLength: 50,
-                                    decoration: new InputDecoration.collapsed(hintText: "Budget Item Name"),
+                                    decoration: InputDecoration.collapsed(hintText: "Budget Item Name"),
                                 ),
-                                new TextField(
+                                TextField(
                                     controller: _amountTextController,
                                     maxLength: 10,
                                     keyboardType: TextInputType.number,
-                                    decoration: new InputDecoration.collapsed(hintText: "Budget Item Amount"),
+                                    decoration: InputDecoration.collapsed(hintText: "Budget Item Amount"),
                                 ),
-                                new TextField(
+                                TextField(
                                     controller: _dayTextController,
                                     maxLength: 2,
                                     keyboardType: TextInputType.number,
-                                    decoration: new InputDecoration.collapsed(hintText: "Budget Item Day"),
+                                    decoration: InputDecoration.collapsed(hintText: "Budget Item Day"),
                                 ),
                             ],
                         )
                     ),
                     actions: <Widget>[
-                        new FlatButton(
-                            child: new Text("Add"),
+                        FlatButton(
+                            child: Text("Add"),
                             onPressed: () { 
                                 if (_nameTextController.text == "" 
                                         && _amountTextController.text == "" 
@@ -80,7 +81,7 @@ class BudgetScreenState extends State<BudgetScreen> {
                                             customShowSnackBar("Please fill in all fields");
                                 }
                                 else {
-                                    BudgetItem budgetItem = new BudgetItem(
+                                    BudgetItem budgetItem = BudgetItem(
                                         itemName: _nameTextController.text,
                                         itemAmount: '\$' + _amountTextController.text,
                                         itemDueDay: _dayTextController.text,
@@ -94,8 +95,8 @@ class BudgetScreenState extends State<BudgetScreen> {
                                 }
                             },
                         ),
-                        new FlatButton(
-                            child: new Text("cancel"),
+                        FlatButton(
+                            child: Text("cancel"),
                             onPressed: () { 
                                 Navigator.of(context).pop();
                             },
@@ -108,23 +109,24 @@ class BudgetScreenState extends State<BudgetScreen> {
     }
 
     // TODO: Fix this
-    void customShowSnackBar(String text) =>  Scaffold.of(context).showSnackBar(new SnackBar(content: Text(text)));
+    void customShowSnackBar(String text) =>  Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
     
     @override
     Widget build(BuildContext context) {
         // TODO: implement build
-        return new Scaffold(
-            appBar: new AppBar(
+        return Scaffold(
+            appBar: AppBar(
                 title: const Text('Budget Me'),
             ),
-            body: new Column(
+            body: Column(
                 children: <Widget>[
-                    new Flexible(
-                        child: new GridView.builder(
-                            gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
+                    BalanceHeader(),
+                    Flexible(
+                        child: GridView.builder(
+                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                                 maxCrossAxisExtent: 250.0
                             ),
-                            padding: new EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             itemBuilder: (_, int index) => _budgetItems[index],
                             itemCount: _budgetItems.length,
                         )
@@ -134,7 +136,7 @@ class BudgetScreenState extends State<BudgetScreen> {
             floatingActionButton: FloatingActionButton(
                 onPressed: _newBudgetItem,
                 tooltip: 'New Budget Item',
-                child: new Icon(Icons.add),
+                child: Icon(Icons.add),
             ),
         );
     }

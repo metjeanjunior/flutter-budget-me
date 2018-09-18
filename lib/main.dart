@@ -24,17 +24,17 @@ class BudgetScreenState extends State<BudgetScreen> {
     final List<BudgetItem> _budgetItems = <BudgetItem>[];
 
     void _newBudgetItem() {
-        BudgetItem budgetItem = new BudgetItem(
-            itemName: "Car Bill",
-            itemAmount: "\$123",
-            itemDueDay: "12",
-        );
+        // BudgetItem budgetItem = new BudgetItem(
+        //     itemName: "Car Bill",
+        //     itemAmount: "\$123",
+        //     itemDueDay: "12",
+        // );
 
-        setState(() {
-            _budgetItems.insert(0, budgetItem);
-        });
+        // setState(() {
+        //     _budgetItems.insert(0, budgetItem);
+        // });
 
-        return;
+        // return;
     
         final TextEditingController _nameTextController = new TextEditingController();
         final TextEditingController _amountTextController = new TextEditingController();
@@ -42,31 +42,33 @@ class BudgetScreenState extends State<BudgetScreen> {
 
         showDialog(
             context: context,
-            barrierDismissible: false,
+            // barrierDismissible: false,
             builder: (BuildContext context) {
                 return new AlertDialog(
                     title: new Text('Budget Item Info'),
-                    content: new Column(
-                        children: <Widget>[
-                            new TextField(
-                                autofocus: true,
-                                controller: _nameTextController,
-                                maxLength: 50,
-                                decoration: new InputDecoration.collapsed(hintText: "Budget Item Name"),
-                            ),
-                            new TextField(
-                                controller: _amountTextController,
-                                maxLength: 10,
-                                keyboardType: TextInputType.number,
-                                decoration: new InputDecoration.collapsed(hintText: "Budget Item Amount"),
-                            ),
-                            new TextField(
-                                controller: _dayTextController,
-                                maxLength: 2,
-                                keyboardType: TextInputType.number,
-                                decoration: new InputDecoration.collapsed(hintText: "Budget Item Day"),
-                            ),
-                        ],
+                    content: new SingleChildScrollView(
+                        child: new ListBody(
+                            children: <Widget>[
+                                new TextField(
+                                    autofocus: true,
+                                    controller: _nameTextController,
+                                    maxLength: 50,
+                                    decoration: new InputDecoration.collapsed(hintText: "Budget Item Name"),
+                                ),
+                                new TextField(
+                                    controller: _amountTextController,
+                                    maxLength: 10,
+                                    keyboardType: TextInputType.number,
+                                    decoration: new InputDecoration.collapsed(hintText: "Budget Item Amount"),
+                                ),
+                                new TextField(
+                                    controller: _dayTextController,
+                                    maxLength: 2,
+                                    keyboardType: TextInputType.number,
+                                    decoration: new InputDecoration.collapsed(hintText: "Budget Item Day"),
+                                ),
+                            ],
+                        )
                     ),
                     actions: <Widget>[
                         new FlatButton(

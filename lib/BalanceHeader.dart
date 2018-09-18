@@ -56,8 +56,10 @@ class BalanceHeaderState extends State<BalanceHeader> {
                     ),
                     Card(
                         // height: this._bodyHeight,
-                        child: Container(
+                        child: AnimatedContainer(
                             height: this._bodyHeight,
+                            curve: Curves.bounceInOut,
+                            duration: const Duration(milliseconds: 500),
                             child: Column(
                                 children: <Widget>[
                                     Row(
@@ -137,7 +139,6 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                                     style: TextStyle(
                                                         fontWeight: FontWeight.bold, 
                                                         fontSize: 20.1,
-                                                        color: Colors.green
                                                     ),
                                                 ),
                                             ),

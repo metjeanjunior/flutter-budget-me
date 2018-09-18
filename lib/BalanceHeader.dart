@@ -8,17 +8,16 @@ class BalanceHeader extends StatefulWidget {
 class BalanceHeaderState extends State<BalanceHeader> {
     double _bodyHeight = 0.0;
 
-    String _balanceText = "Monthly Balance: +\$150";
-    String _incomeText = "Monthly Balance: +\$150";
-    String _expanseText = "Monthly Expance: -\$150";
-    String _numChecksText = "4";
+    int _incomeAmnt = 150;
+    int _expAmnt = 150;
+    int _numChecks = 4;
 
     _getNewHeight() {
-        return this._bodyHeight == 0.0 ? 300.0 : 0.0;
+        return this._bodyHeight == 0.0 ? 150.0 : 0.0;
     }
 
-    _isExpanded() {
-        return this._bodyHeight != 0.0;
+    _getBalanceAmnt() {
+        return this._incomeAmnt - this._expAmnt;
     }
 
     @override
@@ -30,11 +29,22 @@ class BalanceHeaderState extends State<BalanceHeader> {
                         children: <Widget>[
                             Expanded(
                                 child: Text(
-                                    _balanceText,
+                                    "Monthly Balance: ",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold, 
                                         fontSize: 20.1
+                                    ),
+                                )
+                            ),
+                            Expanded(
+                                child: Text(
+                                    _getBalanceAmnt().toString(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold, 
+                                        fontSize: 20.1,
+                                        color: _getBalanceAmnt() >= 0 ? Colors.green : Colors.red
                                     ),
                                 )
                             ),
@@ -52,7 +62,27 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                 children: <Widget>[
                                     Row(
                                         children: <Widget>[
-                                            Text(this._balanceText),
+                                            Expanded(
+                                                child: Text(
+                                                    "Monthly Income: ",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, 
+                                                        fontSize: 20.1,
+                                                    ),
+                                                ),
+                                            ),
+                                            Expanded(
+                                                child: Text(
+                                                    "\$${this._incomeAmnt}",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, 
+                                                        fontSize: 20.1,
+                                                        color: Colors.green
+                                                    ),
+                                                )
+                                            ),
                                             IconButton(
                                                 icon: Icon(Icons.edit),
                                                 onPressed: null,
@@ -61,7 +91,27 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                     ),
                                     Row(
                                         children: <Widget>[
-                                            Text(this._incomeText),
+                                            Expanded(
+                                                child: Text(
+                                                    "Monthly Expenses: ",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, 
+                                                        fontSize: 20.1,
+                                                    ),
+                                                ),
+                                            ),
+                                            Expanded(
+                                                child: Text(
+                                                    "\$${this._expAmnt}",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, 
+                                                        fontSize: 20.1,
+                                                        color: Colors.red
+                                                    ),
+                                                )
+                                            ),
                                             IconButton(
                                                 icon: Icon(Icons.edit),
                                                 onPressed: null,
@@ -70,16 +120,27 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                     ),
                                     Row(
                                         children: <Widget>[
-                                            Text(this._expanseText),
-                                            IconButton(
-                                                icon: Icon(Icons.edit),
-                                                onPressed: null,
-                                            )
-                                        ]
-                                    ),
-                                    Row(
-                                        children: <Widget>[
-                                            Text(this._numChecksText),
+                                            Expanded(
+                                                child: Text(
+                                                    "# of Checks",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, 
+                                                        fontSize: 20.1,
+                                                    ),
+                                                ),
+                                            ),
+                                            Expanded(
+                                                child: Text(
+                                                    this._numChecks.toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, 
+                                                        fontSize: 20.1,
+                                                        color: Colors.green
+                                                    ),
+                                                ),
+                                            ),
                                             IconButton(
                                                 icon: Icon(Icons.edit),
                                                 onPressed: null,

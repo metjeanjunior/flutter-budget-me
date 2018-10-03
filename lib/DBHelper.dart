@@ -65,12 +65,12 @@ class DBHelper{
         });
     }
 
-    void markAsPaid(String itemName) async {
+    void updatePaidStatus(String itemName, int paidStatus) async {
         var dbClient = await db;
 
         await dbClient.rawUpdate(
-            'UPDATE budget SET isPaid = 1 WHERE name = ?',
-            [itemName]
+            'UPDATE budget SET isPaid = ? WHERE name = ?',
+            [paidStatus, itemName]
         );
     }
 }

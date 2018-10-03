@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import 'BudgetItemData.dart';
 import 'DBHelper.dart';
 
-class BudgetItem extends StatelessWidget {
+class BudgetItem extends StatefulWidget {
     BudgetItem(this.budgetItemData);
-
     final BudgetItemData budgetItemData;
+
+    BudgetItemState createState() => BudgetItemState();
+}
+
+class BudgetItemState extends State<BudgetItem> {
+    // BudgetItemState(this.budgetItemData);
 
     @override
     Widget build(BuildContext context) {
         // TODO: implement build
         return new Card(
+            color: widget.budgetItemData.isPaid == 1 ? Colors.green : Colors.red,
             child : new Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget> [
                     new Text(
-                        budgetItemData.name,
+                        widget.budgetItemData.name,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: new TextStyle(
@@ -30,7 +36,7 @@ class BudgetItem extends StatelessWidget {
                         children: <Widget> [
                             new Expanded(
                                 child: new Text(
-                                    budgetItemData.amount.toString(),
+                                    widget.budgetItemData.amount.toString(),
                                     textAlign: TextAlign.center,
                                     style: new TextStyle(
                                         // fontWeight: FontWeight.bold, 
@@ -40,7 +46,7 @@ class BudgetItem extends StatelessWidget {
                             ),
                             new Expanded(
                                 child: new Text(
-                                    budgetItemData.dueDay.toString(),
+                                    widget.budgetItemData.dueDay.toString(),
                                     textAlign: TextAlign.center,
                                     style: new TextStyle(
                                         // fontWeight: FontWeight.bold, 
@@ -55,12 +61,21 @@ class BudgetItem extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget> [
                             new RaisedButton(
-                                child: new Text("Paid"),
+                                child: widget.budgetItemData.isPaid == 1 ? new Text("Not Paid") : new Text("Paid"),
                                 onPressed:  () {
-                                    Scaffold.of(context).showSnackBar(new SnackBar(content: Text("Congrats")));
-
                                     var dbHelper = DBHelper();
-                                    dbHelper.markAsPaid( budgetItemData.name );
+                                    
+                                    if (widget.budgetItemData.isPaid == 0)
+                                    {
+                                        Scaffold.of(context).showSnackBar(new SnackBar(content: Text("Congrats")));
+                                        dbHelper.updatePaidStatus( widget.budgetItemData.name, 1);
+                                    } else
+                                        dbHelper.updatePaidStatus( widget.budgetItemData.name, 0);
+
+                                    setState(() {
+                                        widget.budgetItemData.isPaid =  widget.budgetItemData.isPaid == 0 ? 1 : 0;                                  
+                                    });
+
                                 },
                             )
                         ]

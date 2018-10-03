@@ -40,21 +40,6 @@ class BudgetScreenState extends State<BudgetScreen> {
 
 
     void _newBudgetItem() {
-        // BudgetItem budgetItem = BudgetItem(
-        //     BudgetItemData(
-        //           "Car Bill",
-        //         123,
-        //         12,
-        //         0,
-        //     )
-        // );
-
-        // setState(() {
-        //     _budgetItems.insert(0, budgetItem);
-        // });
-
-        // return;
-    
         final TextEditingController _nameTextController = TextEditingController();
         final TextEditingController _amountTextController = TextEditingController();
         final TextEditingController _dayTextController = TextEditingController();

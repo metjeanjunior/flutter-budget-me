@@ -1,8 +1,3 @@
 # budget_me
 
-A new Flutter project.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+A simple flutter app that I wrote to help me stay on top of my budget

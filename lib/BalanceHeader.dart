@@ -13,7 +13,7 @@ class BalanceHeaderState extends State<BalanceHeader> {
     int _numChecks = 4;
 
     _getNewHeight() {
-        return this._bodyHeight == 0.0 ? 150.0 : 0.0;
+        return this._bodyHeight < 1 ? 150.0 : 0.0;
     }
 
     _getBalanceAmnt() {
@@ -137,13 +137,12 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                 )
                             ),
                             IconButton(
-                                icon: Icon(Icons.settings),
+                                icon: this._bodyHeight < 1 ? Icon(Icons.arrow_drop_down) : Icon(Icons.arrow_drop_up),
                                 onPressed: () => setState(() => this._bodyHeight = _getNewHeight() ),
                             )
                         ]
                     ),
                     Card(
-                        // height: this._bodyHeight,
                         child: AnimatedContainer(
                             height: this._bodyHeight,
                             curve: Curves.easeInOut,

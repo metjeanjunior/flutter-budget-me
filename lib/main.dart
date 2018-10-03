@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'BudgetItemData.dart';
 import 'BudgetItem.dart';
 import 'BalanceHeader.dart';
+import 'DBHelper.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,20 +24,36 @@ class BudgetScreen extends StatefulWidget {
 
 
 class BudgetScreenState extends State<BudgetScreen> {
-    final List<BudgetItem> _budgetItems = <BudgetItem>[];
+    List<BudgetItem> _budgetItems = <BudgetItem>[];
 
-    void _newBudgetItem() {
-        BudgetItem budgetItem = new BudgetItem(
-            itemName: "Car Bill",
-            itemAmount: "\$123",
-            itemDueDay: "12",
-        );
+    @override
+    void initState() { 
+        super.initState();
 
-        setState(() {
-            _budgetItems.insert(0, budgetItem);
+        pupulateBudgetItems().then((newBudgetItems) {
+            setState(() {
+                _budgetItems = newBudgetItems;
+            });
         });
 
-        return;
+    }
+
+
+    void _newBudgetItem() {
+        // BudgetItem budgetItem = BudgetItem(
+        //     BudgetItemData(
+        //           "Car Bill",
+        //         123,
+        //         12,
+        //         0,
+        //     )
+        // );
+
+        // setState(() {
+        //     _budgetItems.insert(0, budgetItem);
+        // });
+
+        // return;
     
         final TextEditingController _nameTextController = TextEditingController();
         final TextEditingController _amountTextController = TextEditingController();
@@ -81,14 +99,19 @@ class BudgetScreenState extends State<BudgetScreen> {
                                             customShowSnackBar("Please fill in all fields");
                                 }
                                 else {
-                                    BudgetItem budgetItem = BudgetItem(
-                                        itemName: _nameTextController.text,
-                                        itemAmount: '\$' + _amountTextController.text,
-                                        itemDueDay: _dayTextController.text,
+                                    BudgetItemData budgetItemData = BudgetItemData(
+                                        _nameTextController.text, 
+                                        int.parse( _amountTextController.text ), 
+                                        int.parse( _dayTextController.text ), 
+                                        0
                                     );
 
+                                    var dbHelper = DBHelper();
+
+                                    dbHelper.saveBudgetItem(budgetItemData);
+
                                     setState(() {
-                                        _budgetItems.insert(0, budgetItem);
+                                        _budgetItems.insert(0, BudgetItem( budgetItemData ));
                                     });
 
                                     Navigator.of(context).pop();
@@ -110,10 +133,21 @@ class BudgetScreenState extends State<BudgetScreen> {
 
     // TODO: Fix this
     void customShowSnackBar(String text) =>  Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+
+    pupulateBudgetItems() async {
+        var dbHelper = DBHelper();
+        List<BudgetItemData> budgetItemsData = await dbHelper.getAllBudgetItemData();
+        List<BudgetItem> newBudgetItems = <BudgetItem>[];
+
+        budgetItemsData.forEach((budgetItemData) =>
+            newBudgetItems.insert(0, BudgetItem(budgetItemData) )
+        );
+
+        return newBudgetItems;
+    }
     
     @override
     Widget build(BuildContext context) {
-        // TODO: implement build
         return Scaffold(
             appBar: AppBar(
                 title: const Text('Budget Me'),

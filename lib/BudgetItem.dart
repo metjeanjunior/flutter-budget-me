@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'BudgetItemData.dart';
+import 'DBHelper.dart';
 
 class BudgetItem extends StatelessWidget {
-    BudgetItem({this.itemName, this.itemAmount, this.itemDueDay});
+    BudgetItem(this.budgetItemData);
 
-    final String itemName;
-    final String itemAmount;
-    final String itemDueDay;
-    
+    final BudgetItemData budgetItemData;
+
     @override
     Widget build(BuildContext context) {
         // TODO: implement build
@@ -16,7 +16,7 @@ class BudgetItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget> [
                     new Text(
-                        itemName,
+                        budgetItemData.name,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: new TextStyle(
@@ -30,7 +30,7 @@ class BudgetItem extends StatelessWidget {
                         children: <Widget> [
                             new Expanded(
                                 child: new Text(
-                                    itemAmount,
+                                    budgetItemData.amount.toString(),
                                     textAlign: TextAlign.center,
                                     style: new TextStyle(
                                         // fontWeight: FontWeight.bold, 
@@ -40,7 +40,7 @@ class BudgetItem extends StatelessWidget {
                             ),
                             new Expanded(
                                 child: new Text(
-                                    itemDueDay,
+                                    budgetItemData.dueDay.toString(),
                                     textAlign: TextAlign.center,
                                     style: new TextStyle(
                                         // fontWeight: FontWeight.bold, 
@@ -58,6 +58,9 @@ class BudgetItem extends StatelessWidget {
                                 child: new Text("Paid"),
                                 onPressed:  () {
                                     Scaffold.of(context).showSnackBar(new SnackBar(content: Text("Congrats")));
+
+                                    var dbHelper = DBHelper();
+                                    dbHelper.markAsPaid( budgetItemData.name );
                                 },
                             )
                         ]

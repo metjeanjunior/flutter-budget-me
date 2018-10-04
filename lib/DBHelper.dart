@@ -31,6 +31,24 @@ class DBHelper{
         // When creating the db, create the table
         await db.execute(
             "CREATE TABLE budget(id INTEGER PRIMARY KEY, name TEXT, amount INTEGER, dueDay INTEGER, isPaid INTEGER)");
+
+        await db.execute(
+            "CREATE TABLE info(id INTEGER PRIMARY KEY, name TEXT, amount INTEGER)");
+
+        await db.transaction((txn) async {
+            await txn.rawInsert(
+                "INSERT INTO info(name, amount) VALUES('income', 0)"
+            );
+
+            await txn.rawInsert(
+                "INSERT INTO info(name, amount) VALUES('expenses', 0)"
+            );
+
+            await txn.rawInsert(
+                "INSERT INTO info(name, amount) VALUES('numChecks', 0)"
+            );
+        });
+
         print("Created tables");
     }
 
@@ -54,6 +72,19 @@ class DBHelper{
         return budgetItemsData;
     }
 
+    Future<List<Map>> getAllInfo() async {
+        var dbClient = await db;
+        List<Map> list = await dbClient.rawQuery('SELECT * FROM info');
+
+        return list;
+    }
+
+    getExpenseAmount() async {
+        var dbClient = await db;
+
+        return Sqflite.firstIntValue(await dbClient.rawQuery("SELECT amount FROM info where name='expenses'"));
+    }
+
     void saveBudgetItem(BudgetItemData budgetItemData) async {
         var dbClient = await db;
         
@@ -72,5 +103,20 @@ class DBHelper{
             'UPDATE budget SET isPaid = ? WHERE name = ?',
             [paidStatus, itemName]
         );
+    }
+
+    void updateInfo(String name, int amount) async {
+        var dbClient = await db;
+
+        if (name == "expenses")
+            await dbClient.rawUpdate(
+                'UPDATE info SET amount = amount + ? WHERE name = ?',
+                [amount, name]
+            );    
+        else
+            await dbClient.rawUpdate(
+                'UPDATE info SET amount = ? WHERE name = ?',
+                [amount, name]
+            );
     }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'BalanceInheritedWidget.dart';
+import 'DBHelper.dart';
 
 class BalanceHeader extends StatefulWidget {
+    const BalanceHeader();
+    
     @override
     BalanceHeaderState createState() => BalanceHeaderState();
 }
@@ -10,7 +14,29 @@ class BalanceHeaderState extends State<BalanceHeader> {
 
     int _incomeAmnt = 0;
     int _expAmnt = 150;
-    int _numChecks = 4;
+    int _numChecks = 0;
+
+    @override
+    void initState() { 
+        super.initState();
+
+        populateInitInfos().then((infoList) {
+            infoList.forEach((info) {
+                if (info["name"] == 'income')
+                    _incomeAmnt = info["amount"];
+                else if (info["name"] == 'numChecks')
+                    _expAmnt = info["amount"];
+            });
+        });
+    }
+
+    populateInitInfos() async {
+        var dbHelper = DBHelper();
+
+        var allInfo = await dbHelper.getAllInfo();
+
+        return allInfo;
+    }
 
     _getNewHeight() {
         return this._bodyHeight < 1 ? 150.0 : 0.0;
@@ -47,7 +73,11 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                 else {
                                     setState(() {
                                         _incomeAmnt = int.parse(_incomeAmntCtr.text);
+
                                     });
+
+                                    var dbHelper = DBHelper();
+                                    dbHelper.updateInfo("income", _incomeAmnt);
 
                                     Navigator.of(context).pop();
                                 }
@@ -92,6 +122,9 @@ class BalanceHeaderState extends State<BalanceHeader> {
                                         _numChecks = int.parse(_numChecksCtr.text);
                                     });
 
+                                    var dbHelper = DBHelper();
+                                    dbHelper.updateInfo("numChecks", _incomeAmnt);
+
                                     Navigator.of(context).pop();
                                 }
                             },
@@ -110,6 +143,9 @@ class BalanceHeaderState extends State<BalanceHeader> {
 
     @override
     Widget build(BuildContext context) {
+        final balanceInheritedWidget = BalanceInheritedWidget.of(context);
+        this._expAmnt = balanceInheritedWidget.expAmnt;
+
         return SingleChildScrollView(
             child: Column(
                 children: <Widget>[

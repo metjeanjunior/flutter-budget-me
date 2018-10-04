@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'BudgetItemData.dart';
 import 'BudgetItem.dart';
 import 'BalanceHeader.dart';
+import 'BalanceInheritedWidget.dart';
 import 'DBHelper.dart';
 
 void main() => runApp(MyApp());
@@ -25,10 +26,13 @@ class BudgetScreen extends StatefulWidget {
 
 class BudgetScreenState extends State<BudgetScreen> {
     List<BudgetItem> _budgetItems = <BudgetItem>[];
+    int expAmnt;
 
     @override
     void initState() { 
         super.initState();
+
+        getExpense();
 
         pupulateBudgetItems().then((newBudgetItems) {
             setState(() {
@@ -94,9 +98,11 @@ class BudgetScreenState extends State<BudgetScreen> {
                                     var dbHelper = DBHelper();
 
                                     dbHelper.saveBudgetItem(budgetItemData);
+                                    dbHelper.updateInfo("expenses", budgetItemData.amount);
 
                                     setState(() {
                                         _budgetItems.insert(0, BudgetItem( budgetItemData ));
+                                        expAmnt += budgetItemData.amount;
                                     });
 
                                     Navigator.of(context).pop();
@@ -130,6 +136,11 @@ class BudgetScreenState extends State<BudgetScreen> {
 
         return newBudgetItems;
     }
+
+    getExpense() async {
+        var dbHelper = DBHelper();
+        expAmnt = await dbHelper.getExpenseAmount() ;
+    }
     
     @override
     Widget build(BuildContext context) {
@@ -139,7 +150,10 @@ class BudgetScreenState extends State<BudgetScreen> {
             ),
             body: Column(
                 children: <Widget>[
-                    BalanceHeader(),
+                    BalanceInheritedWidget(
+                        expAmnt: expAmnt,
+                        child: const BalanceHeader()
+                    ),
                     Flexible(
                         child: GridView.builder(
                             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
